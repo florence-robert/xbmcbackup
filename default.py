@@ -191,7 +191,7 @@ def main():
             xbmcgui.Dialog().ok(STR_OK, f'{STR_ERROR} {mode}')
     except Exception as e:
         utils.log(f'Error: {e}', loglevel=xbmc.LOGERROR)
-        xbmcgui.Dialog().ok(STR_OK, f'{STR_ERROR} {e}')
+        xbmcgui.Dialog().ok(STR_OK, f'Error: {e}')
 
 
 if __name__ == "__main__":
