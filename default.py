@@ -184,7 +184,7 @@ def main():
             Mode.ADVANCED_EDITOR: handle_advanced_editor,
             Mode.LAUNCHER: handle_launcher,
         }
-
+        platform_logs()
         params = get_params()
         mode = get_mode(params)
         if mode in mode_functions:
