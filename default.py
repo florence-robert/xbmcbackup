@@ -11,11 +11,11 @@ from enum import Enum, auto
 
 # Mode constants
 class Mode(Enum):
-    BACKUP = auto()
-    RESTORE = auto()
-    SETTINGS = auto()
-    ADVANCED_EDITOR = auto()
-    LAUNCHER = auto()
+    BACKUP = 0
+    RESTORE = 1
+    SETTINGS = 2
+    ADVANCED_EDITOR = 3
+    LAUNCHER = 4
 
 # String constants
 STR_OK = utils.getString(30010)
