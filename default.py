@@ -185,8 +185,21 @@ def main():
         }
 
         params = get_params()
-
-        utils.log(platform.node())
+        
+        node = platform.node()
+        uname = platform.uname()
+        system_platform = platform.platform()
+        release = platform.release()
+        version = platform.version()
+        system = platform.system()
+        system_alias = platform.system_alias(system, release, version)
+        utils.log(f'Node: {node}')
+        utils.log(f'Uname: {uname}')
+        utils.log(f'Platform: {system_platform}')
+        utils.log(f'Release: {release}')
+        utils.log(f'Version: {version}')
+        utils.log(f'System: {system}')
+        utils.log(f'System Alias: {system_alias}')
 
         mode = get_mode(params)
         if mode in mode_functions:
