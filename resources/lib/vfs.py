@@ -105,13 +105,31 @@ class ZipFileSystem(Vfs):
         # self.zip.write(directory[len(self.root_path):])
         return False
 
+    
+    
     def put(self, source, dest):
+        aFile = None
+        try:
+            aFile = xbmcvfs.File(xbmcvfs.translatePath(source), 'r')
+        except Exception as e:
+            utils.log(f"Error opening file '{source}': {e}")
+            return False
 
-        aFile = xbmcvfs.File(xbmcvfs.translatePath(source), 'r')
+        file_data = None
+        try:
+            file_data = aFile.readBytes()
+        except Exception as e:
+            utils.log(f"Error reading file '{source}': {e}")
+            return False
+        finally:
+            if aFile is not None:
+                aFile.close()
 
-        self.zip.writestr(dest, aFile.readBytes())
-
-        return True
+        if file_data is not None:
+            self.zip.writestr(dest, file_data)
+            return True
+        else:
+            return False
 
     def rmdir(self, directory):
         return False
