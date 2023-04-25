@@ -2,6 +2,7 @@ import sys
 import xbmc
 import xbmcgui
 import xbmcvfs
+import platform
 import resources.lib.utils as utils
 from resources.lib.backup import XbmcBackup
 from resources.lib.authorizers import DropboxAuthorizer
@@ -184,6 +185,9 @@ def main():
         }
 
         params = get_params()
+
+        utils.log(platform.node())
+
         mode = get_mode(params)
         if mode in mode_functions:
             mode_functions[mode](params)
