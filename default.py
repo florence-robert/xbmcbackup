@@ -3,6 +3,7 @@ import xbmc
 import xbmcgui
 import xbmcvfs
 import platform
+import os
 import resources.lib.utils as utils
 from resources.lib.backup import XbmcBackup
 from resources.lib.authorizers import DropboxAuthorizer
@@ -185,22 +186,6 @@ def main():
         }
 
         params = get_params()
-        
-        node = platform.node()
-        uname = platform.uname()
-        system_platform = platform.platform()
-        release = platform.release()
-        version = platform.version()
-        system = platform.system()
-        system_alias = platform.system_alias(system, release, version)
-        utils.log(f'Node: {node}')
-        utils.log(f'Uname: {uname}')
-        utils.log(f'Platform: {system_platform}')
-        utils.log(f'Release: {release}')
-        utils.log(f'Version: {version}')
-        utils.log(f'System: {system}')
-        utils.log(f'System Alias: {system_alias}')
-
         mode = get_mode(params)
         if mode in mode_functions:
             mode_functions[mode](params)
@@ -210,6 +195,23 @@ def main():
         utils.log(f'Error: {e}', loglevel=xbmc.LOGERROR)
         xbmcgui.Dialog().ok(STR_OK, f'Error: {e}')
 
+def platform_logs():
+    node = platform.node()
+    uname = platform.uname()
+    system_platform = platform.platform()
+    release = platform.release()
+    version = platform.version()
+    system = platform.system()
+    system_alias = platform.system_alias(system, release, version)
+    os_uname = os.uname()
+    utils.log(f'Node: {node}')
+    utils.log(f'Uname: {uname}')
+    utils.log(f'Platform: {system_platform}')
+    utils.log(f'Release: {release}')
+    utils.log(f'Version: {version}')
+    utils.log(f'System: {system}')
+    utils.log(f'System Alias: {system_alias}')
+    utils.log(f'OS Uname: {os_uname}')
 
 if __name__ == "__main__":
     main()
