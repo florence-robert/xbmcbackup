@@ -97,7 +97,7 @@ def handle_no_remote_configured():
     utils.openSettings()
 
 
-def handle_backup():
+def handle_backup(params):
     """Handle the backup operation."""
     backup = XbmcBackup()
 
@@ -144,12 +144,12 @@ def handle_restore(params):
         backup.restore()
 
 
-def handle_settings():
+def handle_settings(params):
     """Handle the settings operation."""
     utils.openSettings()
 
 
-def handle_advanced_editor():
+def handle_advanced_editor(params):
     """Handle the advanced editor operation."""
     if utils.getSettingInt('backup_selection_type') == 1:
         editor = AdvancedBackupEditor()
