@@ -15,9 +15,9 @@ class BackupProgressBar:
         self.override = progressOverride
 
         # check if we should use the progress bar
-        if(utils.getSettingInt('progress_mode') != 2):
+        if utils.getSettingInt("progress_mode") != 2:
             # check if background or normal
-            if(utils.getSettingInt('progress_mode') == 0 and not self.override):
+            if utils.getSettingInt("progress_mode") == 0 and not self.override:
                 self.mode = self.DIALOG
                 self.progressBar = xbmcgui.DialogProgress()
             else:
@@ -25,16 +25,15 @@ class BackupProgressBar:
                 self.progressBar = xbmcgui.DialogProgressBG()
 
     def create(self, heading, message):
-        if(self.mode != self.NONE):
+        if self.mode != self.NONE:
             self.progressBar.create(heading, message)
 
     def updateProgress(self, percent, message=None):
-
         # update the progress bar
-        if(self.mode != self.NONE):
-            if(message is not None):
+        if self.mode != self.NONE:
+            if message is not None:
                 # need different calls for dialog and background bars
-                if(self.mode == self.DIALOG):
+                if self.mode == self.DIALOG:
                     self.progressBar.update(percent, message)
                 else:
                     self.progressBar.update(percent, message=message)
@@ -44,11 +43,11 @@ class BackupProgressBar:
     def checkCancel(self):
         result = False
 
-        if(self.mode == self.DIALOG):
+        if self.mode == self.DIALOG:
             result = self.progressBar.iscanceled()
 
         return result
 
     def close(self):
-        if(self.mode != self.NONE):
+        if self.mode != self.NONE:
             self.progressBar.close()

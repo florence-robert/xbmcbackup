@@ -2,7 +2,6 @@ from . import utils as utils
 
 
 class ZipExtractor:
-
     def extract(self, zipFile, outLoc, progressBar):
         utils.log("extracting zip archive")
 
@@ -19,7 +18,9 @@ class ZipExtractor:
             for aFile in zipFile.listFiles():
                 # update the progress bar
                 currentFile += 1
-                progressBar.updateProgress(int((currentFile / fileCount) * 100), utils.getString(30100))
+                progressBar.updateProgress(
+                    int((currentFile / fileCount) * 100), utils.getString(30100)
+                )
 
                 # extract the file
                 zipFile.extract(aFile, outLoc)

@@ -4,7 +4,7 @@ from future.moves.urllib.request import urlopen
 
 
 def shorten(aUrl):
-    tinyurl = 'http://tinyurl.com/api-create.php?url='
+    tinyurl = "http://tinyurl.com/api-create.php?url="
     req = urlopen(tinyurl + aUrl)
     data = req.read()
 

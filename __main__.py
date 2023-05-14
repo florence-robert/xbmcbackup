@@ -2,14 +2,13 @@ import sys
 import xbmc
 import xbmcgui
 import xbmcvfs
-import platform
-import os
 import resources.lib.utils as utils
 from resources.lib.backup import XbmcBackup
 from resources.lib.authorizers import DropboxAuthorizer
 from resources.lib.advanced_editor import AdvancedBackupEditor
 from urllib.parse import urlparse, parse_qs
-from enum import Enum, auto
+from enum import Enum
+
 
 # Mode constants
 class Mode(Enum):
@@ -18,6 +17,7 @@ class Mode(Enum):
     SETTINGS = 2
     ADVANCED_EDITOR = 3
     LAUNCHER = 4
+
 
 # String constants
 STR_OK = utils.getString(30010)
@@ -34,19 +34,20 @@ STR_REMOVE_AUTH_TITLE = utils.getString(30093)
 STR_REMOVE_AUTH_LINE1 = utils.getString(30094)
 STR_REMOVE_AUTH_LINE2 = utils.getString(30095)
 
+
 # Utility functions
 def authorize_dropbox():
     """Authorize Dropbox."""
     authorizer = DropboxAuthorizer()
     if authorizer.authorize():
-        xbmcgui.Dialog().ok(STR_OK, f'{STR_AUTHORIZE_DROPBOX} {STR_AUTHORIZE_SUCCESS}')
+        xbmcgui.Dialog().ok(STR_OK, f"{STR_AUTHORIZE_DROPBOX} {STR_AUTHORIZE_SUCCESS}")
     else:
-        xbmcgui.Dialog().ok(STR_OK, f'{STR_AUTHORIZE_FAILED} {STR_AUTHORIZE_DROPBOX}')
+        xbmcgui.Dialog().ok(STR_OK, f"{STR_AUTHORIZE_FAILED} {STR_AUTHORIZE_DROPBOX}")
 
 
 def authorize_cloud(cloud_provider):
     """Authorize the specified cloud provider."""
-    if cloud_provider == 'dropbox':
+    if cloud_provider == "dropbox":
         authorize_dropbox()
 
 
@@ -54,14 +55,19 @@ def remove_auth():
     """Remove authorization for cloud providers."""
     should_delete = xbmcgui.Dialog().yesno(
         STR_REMOVE_AUTH_TITLE,
-        f'{STR_REMOVE_AUTH_LINE1}\n{STR_REMOVE_AUTH_LINE2}',
-        autoclose=7000
+        f"{STR_REMOVE_AUTH_LINE1}\n{STR_REMOVE_AUTH_LINE2}",
+        autoclose=7000,
     )
 
     if should_delete:
         # Delete any of the known token file types
-        xbmcvfs.delete(xbmcvfs.translatePath(utils.data_dir() + "tokens.txt"))  # Dropbox
-        xbmcvfs.delete(xbmcvfs.translatePath(utils.data_dir() + "google_drive.dat"))  # Google Drive
+        xbmcvfs.delete(
+            xbmcvfs.translatePath(utils.data_dir() + "tokens.txt")
+        )  # Dropbox
+        xbmcvfs.delete(
+            xbmcvfs.translatePath(utils.data_dir() + "google_drive.dat")
+        )  # Google Drive
+
 
 def get_params():
     """Extract parameters from the command line arguments."""
@@ -71,21 +77,22 @@ def get_params():
     except IndexError:
         return {}
 
+
 def get_mode(params):
     """Get the mode based on the provided parameters or from the user."""
     if "mode" in params:
-        if params['mode'] == 'backup':
+        if params["mode"] == "backup":
             return Mode.BACKUP
-        elif params['mode'] == 'restore':
+        elif params["mode"] == "restore":
             return Mode.RESTORE
-        elif params['mode'] == 'launcher':
+        elif params["mode"] == "launcher":
             return Mode.LAUNCHER
 
     # If mode wasn't passed in as arg, get from user
     options = [STR_BACKUP, STR_RESTORE, STR_SETTINGS]
 
     # Check if we're using the advanced editor
-    if utils.getSettingInt('backup_selection_type') == 1:
+    if utils.getSettingInt("backup_selection_type") == 1:
         options.append(STR_ADVANCED_EDITOR)
 
     # Get the mode from the user
@@ -109,6 +116,7 @@ def handle_backup(params):
 
     backup.backup()
 
+
 def handle_restore(params):
     """Handle the restore operation."""
     backup = XbmcBackup()
@@ -128,8 +136,8 @@ def handle_restore(params):
     selected_restore = -1
 
     if "archive" in params:
-        if params['archive'] in folder_names:
-            selected_restore = folder_names.index(params['archive'])
+        if params["archive"] in folder_names:
+            selected_restore = folder_names.index(params["archive"])
             utils.log(f'{selected_restore} : {params["archive"]}')
         else:
             utils.showNotification(STR_NO_REMOTE)
@@ -140,8 +148,8 @@ def handle_restore(params):
     if selected_restore != -1:
         backup.selectRestore(restore_points[selected_restore][0])
 
-    if 'sets' in params:
-        backup.restore(selectedSets=params['sets'].split('|'))
+    if "sets" in params:
+        backup.restore(selectedSets=params["sets"].split("|"))
     else:
         backup.restore()
 
@@ -153,7 +161,7 @@ def handle_settings(params):
 
 def handle_advanced_editor(params):
     """Handle the advanced editor operation."""
-    if utils.getSettingInt('backup_selection_type') == 1:
+    if utils.getSettingInt("backup_selection_type") == 1:
         editor = AdvancedBackupEditor()
         editor.showMainScreen()
 
@@ -161,13 +169,13 @@ def handle_advanced_editor(params):
 def handle_launcher(params):
     """Handle the launcher operation."""
     launcher_actions = {
-        'authorize_cloud': lambda: authorize_cloud(params['provider']),
-        'remove_auth': remove_auth,
-        'advanced_editor': handle_advanced_editor,
-        'advanced_copy_config': AdvancedBackupEditor().copySimpleConfig
+        "authorize_cloud": lambda: authorize_cloud(params["provider"]),
+        "remove_auth": remove_auth,
+        "advanced_editor": handle_advanced_editor,
+        "advanced_copy_config": AdvancedBackupEditor().copySimpleConfig,
     }
 
-    action = params['action']
+    action = params["action"]
     if action in launcher_actions:
         launcher_actions[action]()
     else:
@@ -184,34 +192,16 @@ def main():
             Mode.ADVANCED_EDITOR: handle_advanced_editor,
             Mode.LAUNCHER: handle_launcher,
         }
-        platform_logs()
         params = get_params()
         mode = get_mode(params)
         if mode in mode_functions:
             mode_functions[mode](params)
         else:
-            xbmcgui.Dialog().ok(STR_OK, f'{STR_ERROR} {mode}')
+            xbmcgui.Dialog().ok(STR_OK, f"{STR_ERROR} {mode}")
     except Exception as e:
-        utils.log(f'Error: {e}', loglevel=xbmc.LOGERROR)
-        xbmcgui.Dialog().ok(STR_OK, f'Error: {e}')
+        utils.log(f"Error: {e}", loglevel=xbmc.LOGERROR)
+        xbmcgui.Dialog().ok(STR_OK, f"Error: {e}")
 
-def platform_logs():
-    node = platform.node()
-    uname = platform.uname()
-    system_platform = platform.platform()
-    release = platform.release()
-    version = platform.version()
-    system = platform.system()
-    system_alias = platform.system_alias(system, release, version)
-    os_uname = os.uname()
-    utils.log(f'Node: {node}')
-    utils.log(f'Uname: {uname}')
-    utils.log(f'Platform: {system_platform}')
-    utils.log(f'Release: {release}')
-    utils.log(f'Version: {version}')
-    utils.log(f'System: {system}')
-    utils.log(f'System Alias: {system_alias}')
-    utils.log(f'OS Uname: {os_uname}')
 
 if __name__ == "__main__":
     main()
