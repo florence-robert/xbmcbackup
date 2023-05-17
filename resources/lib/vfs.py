@@ -64,7 +64,7 @@ class Vfs:
     def cleanup(self):
         return True
 
-    def file_size(self, filename):
+    def fileSize(self, filename):
         return 0  # result should be in KB
 
 
@@ -92,7 +92,7 @@ class XBMCFileSystem(Vfs):
     def exists(self, aFile):
         return xbmcvfs.exists(aFile)
 
-    def file_size(self, filename):
+    def fileSize(self, filename):
         with xbmcvfs.File(filename) as f:
             result = f.size() / 1024  # bytes to kilobytes
 
@@ -282,7 +282,7 @@ class DropboxFileSystem(Vfs):
                 )
                 upload_cursor.offset = f.tell()
 
-    def file_size(self, filename):
+    def fileSize(self, filename):
         aFile = self._fix_slashes(filename)
 
         if self.client is not None:

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="script.xbmcbackup"
-    name="Backup" version="1.7.4" provider-name="francis-robert">
+    name="Backup" version="1.7.5" provider-name="francis-robert">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.dateutil" version="2.8.0" />
