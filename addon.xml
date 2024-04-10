@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.program.catbackup" name="CatBackup" version="0.0.1~alpha" provider-name="florence-wolfe">
+<addon id="plugin.program.catbackup" name="CatBackup" version="0.0.2~alpha" provider-name="florence-wolfe">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.dateutil" version="2.8.0" />
