@@ -3,7 +3,8 @@ import xbmcgui
 import xbmcaddon
 import xbmcvfs
 
-__addon_id__ = "script.xbmcbackup"
+# TODO: REMOVE THIS
+__addon_id__ = "plugin.program.catbackup"
 __Addon = xbmcaddon.Addon(__addon_id__)
 
 
